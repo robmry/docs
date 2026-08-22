@@ -159,7 +159,7 @@ Model names must match the provider's naming exactly. Common mistakes:
 
 ### Network connectivity
 
-If the agent hangs or times out, check that you can reach the provider's API endpoint. Firewalls, VPNs, or proxy settings may block requests.
+If the agent hangs or times out, check that you can reach the provider's API endpoint. Firewalls, VPNs, or proxy settings may block requests. Docker Agent does not evaluate PAC files or URLs directly. When Docker Desktop is running, eligible requests use its PAC adapter before environment proxy settings; `NO_PROXY` does not bypass that selection. Set `DOCKER_AGENT_DISABLE_DESKTOP_PROXY=1` (or `true`, `yes`, or `on`) to restore `HTTP_PROXY`, `HTTPS_PROXY`, `ALL_PROXY`, and `NO_PROXY` routing per request; see [Docker Desktop proxy](../../tools/fetch/index.md#docker-desktop-proxy) for scope and SSRF behavior.
 
 ## Tool Execution Failures
 
@@ -227,6 +227,13 @@ Docker Agent validates config at startup and reports errors with line numbers. C
 > Use the [JSON schema](https://github.com/docker/docker-agent/blob/main/agent-schema.json) in your editor for real-time config validation and autocompletion.
 
 ## Session &amp; Connectivity Issues
+
+### Downgrade fails with a newer-database error
+
+If an older Docker Agent binary cannot open the session database after an upgrade,
+the database may contain a schema migration that the older binary does not know.
+Restore a database created by the older version, or use a binary that includes the
+migration.
 
 ### Port conflicts
 
